@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="regression">
+    <test name = "regression">
+        <groups>
+            <run>
+                <include name="regression"/>
+                <include name="smoke"/>
+            </run>
+        </groups>
+        <classes>
+            <class name="LoginTest">
+            <methods>
+                <exclude name="myFirstTest"></exclude>
+            </methods>
+            </class>
+        </classes>
+    </test>
+    <test name="non-regression">
+        <classes>
+            <class name="LoginTest">
+                <methods>
+                    <include name="myFirstTest"></include>
+                </methods>
+            </class>
+        </classes>
+    </test>
+</suite>
