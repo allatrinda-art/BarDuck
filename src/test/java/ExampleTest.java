@@ -1,6 +1,6 @@
 import org.testng.annotations.*;
 
-public class LoginTest {
+public class ExampleTest {
 
     @BeforeSuite
     public static void suiteSetUp() {

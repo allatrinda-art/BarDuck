@@ -9,7 +9,7 @@
             </run>
         </groups>
         <classes>
-            <class name="LoginTest">
+            <class name="ExampleTest">
             <methods>
                 <exclude name="myFirstTest"></exclude>
             </methods>
@@ -18,7 +18,7 @@
     </test>
     <test name="non-regression">
         <classes>
-            <class name="LoginTest">
+            <class name="ExampleTest">
                 <methods>
                     <include name="myFirstTest"></include>
                 </methods>
