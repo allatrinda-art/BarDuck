@@ -3,7 +3,6 @@ package pages.object;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Select;
 
@@ -28,12 +27,18 @@ public class HomePage extends BasePage{
     }
 
     public String waitForAndGetCartQuantity() {
-    // Ждем, пока количество товаров в корзине станет больше 0
-    wait.until(d -> ((JavascriptExecutor) d)
-            .executeScript("return document.querySelector(arguments[0]).textContent", CART_QUANTITY_CSS)
-            .toString().trim().matches("[1-9][0-9]*")); // Ожидаем число больше 0
-    // Получаем текст из корзины и возвращаем
-    return driver.findElement(cartQuantity).getText();
+        // Получаем текущее количество товаров в корзине
+        String currentQuantity = driver.findElement(cartQuantity).getText().trim();
+        // Ждем, пока количество товаров в корзине изменится
+        wait.until(d -> {
+            String newQuantity = ((JavascriptExecutor) d)
+                    .executeScript("return document.querySelector(arguments[0]).textContent", CART_QUANTITY_CSS)
+                    .toString().trim();
+            // Убедимся, что число больше 0 и не равно предыдущему
+            return !newQuantity.equals(currentQuantity) && newQuantity.matches("[1-9][0-9]*");
+        });
+        // Возвращаем новое количество товаров
+        return driver.findElement(cartQuantity).getText().trim();
     }
 
     public static void cartClick(WebDriver driver) {
