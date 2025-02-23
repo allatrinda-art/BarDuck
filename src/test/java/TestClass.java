@@ -8,14 +8,16 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import tests.BaseTest;
 
+import static pages.object.WebDriverContainer.getDriver;
+
 public class TestClass extends BaseTest {
 
     @Test
     public void herokuAppTest() {
-        driver.get("https://the-internet.herokuapp.com/");
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        getDriver().get("https://the-internet.herokuapp.com/");
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
         List<WebElement> elements = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.tagName("a")));
-        String actualText = driver.findElement(By.cssSelector("a[href='/drag_and_drop']")).getText();
+        String actualText = getDriver().findElement(By.cssSelector("a[href='/drag_and_drop']")).getText();
         elements.get(9).click();
         Assert.assertEquals(actualText, "Drag and Drop", "No such text");
     }

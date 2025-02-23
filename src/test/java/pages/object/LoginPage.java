@@ -1,7 +1,9 @@
 package pages.object;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.testng.Assert;
 
 public class LoginPage extends BasePage{
 
@@ -14,13 +16,15 @@ public class LoginPage extends BasePage{
         super(driver);
     }
 
-    public static void login(WebDriver driver, String email, String password) {
-        driver.findElement(emailInput).sendKeys(email);
-        driver.findElement(passwordInput).sendKeys(password);
-        driver.findElement(loginButton).click();
+    @Step("enter correct data and submit")
+    public static void login(String email, String password) {
+        WebDriverContainer.getDriver().findElement(emailInput).sendKeys(email);
+        WebDriverContainer.getDriver().findElement(passwordInput).sendKeys(password);
+        WebDriverContainer.getDriver().findElement(loginButton).click();
     }
 
-    public static String getMessage(WebDriver driver) {
-        return driver.findElement(welcomeText).getText();
+    @Step("Validate login result message")
+    public static void validateMessage(String actualMessage) {
+        Assert.assertEquals(WebDriverContainer.getDriver().findElement(welcomeText).getText(), actualMessage);
     }
 }

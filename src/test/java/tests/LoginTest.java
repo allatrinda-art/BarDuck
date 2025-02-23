@@ -1,5 +1,10 @@
 package tests;
 
+import com.beust.jcommander.IStringConverter;
+import io.qameta.allure.Description;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Story;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import pages.object.LoginPage;
@@ -7,15 +12,31 @@ import pages.object.helpers.Credentials;
 
 public class LoginTest extends BaseTest{
 
-    private String userEmail = Credentials.getProperty("email");
-    private String userPassword = Credentials.getProperty("password");
-    private String userName = Credentials.getProperty("name");
-    private String loginSuccessMessage = "You are now logged in as %s.";
+    private final String userEmail = Credentials.getProperty("email");
+    private final String userPassword = Credentials.getProperty("password");
+    private final String userName = Credentials.getProperty("name");
+    private final String loginSuccessMessage = "You are now logged in as %s!.";
+    private final String emptyPassword = "";
+    private final String incorrectPassword = "sdgesbwen";
+    private final String loginErrorMessage = "Wrong password or the account is disabled, or does not exist";
 
-    @Test
+    @Epic("Authentication")
+    @Feature("User can login with credentials")
+    @Test(description = "Login with correct credentials")
     public void successfulLoginTest() {
-        LoginPage.login(driver, userEmail, userPassword);
-        String actualMessage = LoginPage.getMessage(driver);
-        Assert.assertEquals(actualMessage, String.format(loginSuccessMessage, userName));
+        LoginPage.login(userEmail, userPassword);
+        String formattedMessage = String.format(loginSuccessMessage, userName);
+        LoginPage.validateMessage(formattedMessage);
     }
+
+    @Description("User gets error message with incorrect password")
+    @Test(description = "Wrong password")
+    public void incorrectLoginTest() {
+        LoginPage.login(userEmail, incorrectPassword);
+        LoginPage.validateMessage(loginErrorMessage);
+    }
+
+//    @Description("asd")
+//    @Story("SignUp functional")
+
 }

@@ -9,36 +9,29 @@ import org.openqa.selenium.safari.SafariDriver;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import java.time.Duration;
+
+import org.testng.annotations.Listeners;
+import pages.object.WebDriverContainer;
 import pages.object.enums.Browser;
+import pages.object.listeners.ScreenshotListener;
 
 public class BaseTest {
-
-    protected WebDriver driver;
+    //protected WebDriver driver;
 
     @BeforeMethod
     protected void setUp()    {
-        Browser browser = Browser.valueOf(System.getProperty("browser", "chrome").toLowerCase());
-        driver = switch(browser) {
-            case chrome -> {
-                ChromeOptions options = new ChromeOptions();
-                options.addArguments("--ignore-certificate-errors");
-                yield new ChromeDriver();
-            }
-            case firefox -> new FirefoxDriver();
-            case edge -> new EdgeDriver();
-            case safari -> new SafariDriver();
-        };
-        driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(30));
-        driver.manage().timeouts().getScriptTimeout();
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-        driver.manage().window().maximize();
-        driver.get("http://litecart.stqa.ru/en/");
+//                driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(30));
+//        driver.manage().timeouts().getScriptTimeout();
+//        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+//        driver.manage().window().maximize();
+        WebDriverContainer.getDriver().get("http://litecart.stqa.ru/en/");
     }
 
     @AfterMethod
     protected void tearDown() {
-        if (driver != null) {
-            driver.quit();
-        }
+        WebDriverContainer.closeDriver();
+//        if (driver != null) {
+//            driver.quit();
+//        }
     }
 }

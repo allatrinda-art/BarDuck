@@ -7,22 +7,24 @@ import pages.object.CatalogPage;
 import pages.object.HomePage;
 import pages.object.ItemPage;
 
+import static pages.object.WebDriverContainer.getDriver;
+
 public class CartTest extends BaseTest{
 
     private String cartMessage = "There are no items in your cart.";
 
     @Test
     public void itemCanBeRemovedInCartTest () {
-        ItemPage itemPage = new ItemPage(driver);
-        HomePage homePage = new HomePage(driver);
-        CartPage cartPage = new CartPage(driver);
+        ItemPage itemPage = new ItemPage(getDriver());
+        HomePage homePage = new HomePage(getDriver());
+        CartPage cartPage = new CartPage(getDriver());
 
-        HomePage.categoryMenuClick(driver);
-        CatalogPage.selectItemInTheGrid(driver);
+        HomePage.categoryMenuClick();
+        CatalogPage.selectItemInTheGrid();
         itemPage.addItemToCart();
         homePage.waitForAndGetCartQuantity();
-        HomePage.cartClick(driver);
-        CartPage.removeButtonClick(driver);
+        HomePage.cartClick();
+        CartPage.removeButtonClick();
         String noItemsText = cartPage.removalMessage();
         Assert.assertEquals(noItemsText, cartMessage, "Cart is not empty");
     }

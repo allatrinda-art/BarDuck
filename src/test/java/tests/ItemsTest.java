@@ -6,15 +6,17 @@ import pages.object.CatalogPage;
 import pages.object.HomePage;
 import pages.object.ItemPage;
 
+import static pages.object.WebDriverContainer.getDriver;
+
 public class ItemsTest extends BaseTest{
 
     @Test
     public void userCanAddItemToCartTest () {
-        ItemPage itemPage = new ItemPage(driver);
-        HomePage homePage = new HomePage(driver);
+        ItemPage itemPage = new ItemPage(getDriver());
+        HomePage homePage = new HomePage(getDriver());
 
-        HomePage.categoryMenuClick(driver);
-        CatalogPage.selectItemInTheGrid(driver);
+        HomePage.categoryMenuClick();
+        CatalogPage.selectItemInTheGrid();
         itemPage.addItemToCart();
         String getCartAmount = homePage.waitForAndGetCartQuantity();
         Assert.assertEquals(getCartAmount, "1", "No items in the cart");
@@ -22,9 +24,9 @@ public class ItemsTest extends BaseTest{
 
     @Test
     public void itemDetailsIsDisplayedTest () {
-        HomePage.selectSubCategory(driver);
-        CatalogPage.selectItemInSubCategory(driver);
-        ItemPage.clickOnDetails(driver);
-        Assert.assertTrue(ItemPage.detailsInfoIsDisplayed(driver));
+        HomePage.selectSubCategory();
+        CatalogPage.selectItemInSubCategory();
+        ItemPage.clickOnDetails();
+        Assert.assertTrue(ItemPage.detailsInfoIsDisplayed());
     }
 }

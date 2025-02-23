@@ -10,10 +10,10 @@ public class HomeTest extends BaseTest{
 
     @Test
     public void currencyCanBeChangedToEurTest () {
-        HomePage.clickOnChangeButton(driver);
-        HomePage.selectCurrency(driver);
-        HomePage.saveCurrency(driver);
-        String currency = HomePage.checkSavedCurrency(driver);
+        HomePage.clickOnChangeButton();
+        HomePage.selectCurrency();
+        HomePage.saveCurrency();
+        String currency = HomePage.checkSavedCurrency();
         Assert.assertEquals(currency, updatedCurrency, "Currency is not updated");
     }
 }

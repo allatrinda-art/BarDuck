@@ -20,12 +20,12 @@ public class ItemPage extends BasePage{
         addToCartButtonWait.click();
     }
 
-    public static void clickOnDetails(WebDriver driver) {
-        driver.findElement(detailsTab).click();
+    public static void clickOnDetails() {
+        WebDriverContainer.getDriver().findElement(detailsTab).click();
     }
 
-    public static boolean detailsInfoIsDisplayed(WebDriver driver) {
-        driver.findElement(detailsInfo).isEnabled();
+    public static boolean detailsInfoIsDisplayed() {
+        WebDriverContainer.getDriver().findElement(detailsInfo).isEnabled();
         return true;
     }
 }

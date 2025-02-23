@@ -22,13 +22,13 @@ public class HomePage extends BasePage{
         super(driver);
     }
 
-    public static void categoryMenuClick(WebDriver driver) {
-       driver.findElement(categoryMenu).click();
+    public static void categoryMenuClick() {
+        WebDriverContainer.getDriver().findElement(categoryMenu).click();
     }
 
     public String waitForAndGetCartQuantity() {
         // Получаем текущее количество товаров в корзине
-        String currentQuantity = driver.findElement(cartQuantity).getText().trim();
+        String currentQuantity = WebDriverContainer.getDriver().findElement(cartQuantity).getText().trim();
         // Ждем, пока количество товаров в корзине изменится
         wait.until(d -> {
             String newQuantity = ((JavascriptExecutor) d)
@@ -38,34 +38,35 @@ public class HomePage extends BasePage{
             return !newQuantity.equals(currentQuantity) && newQuantity.matches("[1-9][0-9]*");
         });
         // Возвращаем новое количество товаров
-        return driver.findElement(cartQuantity).getText().trim();
+        return WebDriverContainer.getDriver().findElement(cartQuantity).getText().trim();
     }
 
-    public static void cartClick(WebDriver driver) {
-        driver.findElement(cart).click();
+    public static void cartClick() {
+        WebDriverContainer.getDriver().findElement(cart).click();
     }
 
-    public static void selectSubCategory(WebDriver driver) {
+    public static void selectSubCategory() {
         // Создаем объект Actions
-        Actions actions = new Actions(driver);
+        Actions actions = new Actions(WebDriverContainer.getDriver());
         // Наводим курсор на элемент
-        actions.moveToElement(driver.findElement(categoryMenu)).click(driver.findElement(menuSubCategory)).perform();
+        actions.moveToElement(WebDriverContainer.getDriver().findElement(categoryMenu))
+                .click(WebDriverContainer.getDriver().findElement(menuSubCategory)).perform();
     }
 
-    public static void clickOnChangeButton(WebDriver driver) {
-        driver.findElement(changeButton).click();
+    public static void clickOnChangeButton() {
+        WebDriverContainer.getDriver().findElement(changeButton).click();
     }
 
-    public static void selectCurrency(WebDriver driver) {
-        Select dropdown = new Select(driver.findElement(currency));
+    public static void selectCurrency() {
+        Select dropdown = new Select(WebDriverContainer.getDriver().findElement(currency));
         dropdown.selectByVisibleText("Euros");
     }
 
-    public static void saveCurrency(WebDriver driver) {
-        driver.findElement(saveButton).click();
+    public static void saveCurrency() {
+        WebDriverContainer.getDriver().findElement(saveButton).click();
     }
 
-    public static String checkSavedCurrency(WebDriver driver) {
-        return driver.findElement(savedCurrency).getText();
+    public static String checkSavedCurrency() {
+        return WebDriverContainer.getDriver().findElement(savedCurrency).getText();
     }
 }

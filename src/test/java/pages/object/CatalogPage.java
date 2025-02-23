@@ -12,12 +12,12 @@ public class CatalogPage extends BasePage{
         super(driver);
     }
 
-    public static void selectItemInTheGrid(WebDriver driver) {
-        driver.findElement(purpleDuck).click();
+    public static void selectItemInTheGrid() {
+        WebDriverContainer.getDriver().findElement(purpleDuck).click();
     }
 
-    public static void selectItemInSubCategory(WebDriver driver) {
-        driver.findElement(itemInCatalog).click();
+    public static void selectItemInSubCategory() {
+        WebDriverContainer.getDriver().findElement(itemInCatalog).click();
     }
 
 }

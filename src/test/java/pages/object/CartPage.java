@@ -13,11 +13,11 @@ public class CartPage extends BasePage{
         super(driver);
     }
 
-    public static void removeButtonClick(WebDriver driver) {
-        driver.findElement(removeButton).click();
+    public static void removeButtonClick() {
+        WebDriverContainer.getDriver().findElement(removeButton).click();
     }
 
     public String removalMessage() {
-        return driver.findElement(noItemsText).getText();
+        return WebDriverContainer.getDriver().findElement(noItemsText).getText();
     }
 }
