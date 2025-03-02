@@ -16,7 +16,7 @@ import pages.object.enums.Browser;
 import pages.object.listeners.ScreenshotListener;
 
 public class BaseTest {
-    //protected WebDriver driver;
+    protected static WebDriver driver;
 
     @BeforeMethod
     protected void setUp()    {
@@ -24,14 +24,13 @@ public class BaseTest {
 //        driver.manage().timeouts().getScriptTimeout();
 //        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 //        driver.manage().window().maximize();
-        WebDriverContainer.getDriver().get("http://litecart.stqa.ru/en/");
+        driver = WebDriverContainer.getDriver();
+        //WebDriverContainer.getDriver().get("http://litecart.stqa.ru/en/");
+        driver.get("http://litecart.stqa.ru/en/");
     }
 
     @AfterMethod
     protected void tearDown() {
         WebDriverContainer.closeDriver();
-//        if (driver != null) {
-//            driver.quit();
-//        }
     }
 }

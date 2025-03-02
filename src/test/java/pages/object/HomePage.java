@@ -1,10 +1,11 @@
 package pages.object;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Select;
+import org.testng.Assert;
 
 public class HomePage extends BasePage{
 
@@ -18,15 +19,13 @@ public class HomePage extends BasePage{
     private static By saveButton = By.cssSelector("button[name='save']");
     private static By savedCurrency = By.cssSelector("div.currency span");
 
-    public HomePage(WebDriver driver) {
-        super(driver);
-    }
-
+    @Step("Click on category menu")
     public static void categoryMenuClick() {
         WebDriverContainer.getDriver().findElement(categoryMenu).click();
     }
 
-    public String waitForAndGetCartQuantity() {
+    @Step("Check cart quantity is updated")
+    public static void waitForAndGetCartQuantity(String itemAmount) {
         // Получаем текущее количество товаров в корзине
         String currentQuantity = WebDriverContainer.getDriver().findElement(cartQuantity).getText().trim();
         // Ждем, пока количество товаров в корзине изменится
@@ -38,13 +37,16 @@ public class HomePage extends BasePage{
             return !newQuantity.equals(currentQuantity) && newQuantity.matches("[1-9][0-9]*");
         });
         // Возвращаем новое количество товаров
-        return WebDriverContainer.getDriver().findElement(cartQuantity).getText().trim();
+        Assert.assertEquals(WebDriverContainer.getDriver().findElement(cartQuantity).getText().trim(), itemAmount,
+                "No items in the cart");
     }
 
+    @Step("Click on cart icon")
     public static void cartClick() {
         WebDriverContainer.getDriver().findElement(cart).click();
     }
 
+    @Step("Select subcategory")
     public static void selectSubCategory() {
         // Создаем объект Actions
         Actions actions = new Actions(WebDriverContainer.getDriver());
@@ -53,20 +55,25 @@ public class HomePage extends BasePage{
                 .click(WebDriverContainer.getDriver().findElement(menuSubCategory)).perform();
     }
 
+    @Step("Click on change button in the header")
     public static void clickOnChangeButton() {
         WebDriverContainer.getDriver().findElement(changeButton).click();
     }
 
+    @Step("Open the list of the currency and select one")
     public static void selectCurrency() {
         Select dropdown = new Select(WebDriverContainer.getDriver().findElement(currency));
         dropdown.selectByVisibleText("Euros");
     }
 
+    @Step("Save currency")
     public static void saveCurrency() {
         WebDriverContainer.getDriver().findElement(saveButton).click();
     }
 
-    public static String checkSavedCurrency() {
-        return WebDriverContainer.getDriver().findElement(savedCurrency).getText();
+    @Step("Check saved currency")
+    public static void checkSavedCurrency(String updatedCurrency) {
+        Assert.assertEquals(WebDriverContainer.getDriver().findElement(savedCurrency).getText(), updatedCurrency,
+                "Currency is not updated");
     }
 }

@@ -15,7 +15,6 @@ import java.net.URL;
 import java.time.Duration;
 import pages.object.enums.OS;
 
-import static org.openqa.selenium.remote.Browser.CHROME;
 import static pages.object.enums.OS.*;
 
 public class WebDriverContainer {
@@ -84,15 +83,17 @@ public class WebDriverContainer {
 //        driver = null;
 //    }
 
-public static WebDriver getDriver() {
-    Browser browser = Browser.valueOf(System.getProperty("browser", "chrome").toLowerCase());
-    OS platform = OS.valueOf(System.getProperty("os", "local").toLowerCase());
-    if (driver == null) {
-        if (platform == local) {
+public static synchronized WebDriver getDriver() {
+    if (driver == null || ((RemoteWebDriver) driver).getSessionId() == null) {
+        Browser browser = Browser.valueOf(System.getProperty("browser", "chrome").toLowerCase());
+        OS platform = OS.valueOf(System.getProperty("os", "local").toLowerCase());
+
+        if (platform == OS.local) {
             createLocalDriver(browser);
         } else {
             createRemoteDriver(browser, platform);
         }
+
         driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(10));
         driver.manage().timeouts().scriptTimeout(Duration.ofMinutes(5));
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(2));
@@ -100,10 +101,14 @@ public static WebDriver getDriver() {
     }
     return driver;
 }
-    public static void closeDriver() {
-        driver.quit();
-        driver = null;
+
+    public static synchronized void closeDriver() {
+        if (driver != null) {
+            driver.quit();
+            driver = null;
+        }
     }
+
     private static void createRemoteDriver(Browser browser, OS platform) {
         DesiredCapabilities caps = new DesiredCapabilities();
         switch (browser) {
@@ -113,9 +118,12 @@ public static WebDriver getDriver() {
 //                    caps.setVersion("133.0.6943.99");
                 caps.setAcceptInsecureCerts(true);
             }
-            case firefox -> new FirefoxDriver();
-            case edge -> new EdgeDriver();
-            case safari -> new SafariDriver();
+//            case firefox -> new FirefoxDriver();
+//            case edge -> new EdgeDriver();
+//            case safari -> new SafariDriver();
+            case firefox -> caps.setBrowserName("firefox");
+            case edge -> caps.setBrowserName("MicrosoftEdge");
+            case safari -> caps.setBrowserName("safari");
         }
         switch (platform) {
             case windows -> caps.setPlatform(Platform.WINDOWS);
@@ -141,4 +149,4 @@ public static WebDriver getDriver() {
             case safari -> new SafariDriver();
         };
     }
- }
+}

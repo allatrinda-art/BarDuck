@@ -1,31 +1,31 @@
 package tests;
 
-import org.testng.Assert;
+import io.qameta.allure.Description;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
 import org.testng.annotations.Test;
 import pages.object.CartPage;
 import pages.object.CatalogPage;
 import pages.object.HomePage;
 import pages.object.ItemPage;
 
-import static pages.object.WebDriverContainer.getDriver;
-
 public class CartTest extends BaseTest{
 
-    private String cartMessage = "There are no items in your cart.";
+    private final String cartMessage = "There are no items in your cart.";
+    private final String itemName = "Purple Duck";
+    private final String itemAmount = "1";
 
-    @Test
+    @Epic("Cart")
+    @Feature("Removal functionality in the cart")
+    @Description("Cart is empty when User removes all items")
+    @Test(description = "Item is removed in the cart")
     public void itemCanBeRemovedInCartTest () {
-        ItemPage itemPage = new ItemPage(getDriver());
-        HomePage homePage = new HomePage(getDriver());
-        CartPage cartPage = new CartPage(getDriver());
-
         HomePage.categoryMenuClick();
-        CatalogPage.selectItemInTheGrid();
-        itemPage.addItemToCart();
-        homePage.waitForAndGetCartQuantity();
+        CatalogPage.selectItemInTheGrid(itemName);
+        ItemPage.addItemToCart();
+        HomePage.waitForAndGetCartQuantity(itemAmount);
         HomePage.cartClick();
         CartPage.removeButtonClick();
-        String noItemsText = cartPage.removalMessage();
-        Assert.assertEquals(noItemsText, cartMessage, "Cart is not empty");
+        CartPage.removalMessage(cartMessage);
     }
 }

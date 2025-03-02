@@ -7,15 +7,17 @@ import java.time.Duration;
 
 public class BasePage {
     //protected WebDriver driver;
-    protected WebDriverWait wait;
+    protected static WebDriverWait wait;
 
-    // Конструктор, принимающий WebDriver
-    public BasePage(WebDriver driver) {
-       // this.driver = driver;
-        this.wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+    static {
+        updateWait();
     }
 
-    public String getTitle() {
-        return WebDriverContainer.getDriver().getTitle();
+    // Конструктор, принимающий WebDriver
+//    public BasePage(WebDriver driver) {
+    public static void updateWait() {
+       // this.driver = driver;
+        WebDriver driver = WebDriverContainer.getDriver();
+        wait = new WebDriverWait(driver, Duration.ofSeconds(5));
     }
 }
