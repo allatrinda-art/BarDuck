@@ -6,6 +6,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.safari.SafariDriver;
@@ -152,7 +153,13 @@ public static synchronized WebDriver getDriver() {
                 options.addArguments("--ignore-certificate-errors");
                 yield new ChromeDriver(options);
             }
-            case firefox -> new FirefoxDriver();
+            case firefox -> {
+                FirefoxOptions options = new FirefoxOptions();
+                if (System.getenv("JENKINS_HOME") != null) {
+                    options.addArguments("--headless");
+                }
+                yield new FirefoxDriver(options);
+            }
             case edge -> new EdgeDriver();
             case safari -> new SafariDriver();
         };

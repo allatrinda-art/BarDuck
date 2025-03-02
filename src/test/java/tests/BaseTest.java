@@ -20,7 +20,7 @@ public class BaseTest {
     protected static WebDriver driver;
 
     @BeforeMethod
-    protected void setUp()    {
+    protected synchronized  void setUp()    {
 //                driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(30));
 //        driver.manage().timeouts().getScriptTimeout();
 //        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
@@ -32,7 +32,7 @@ public class BaseTest {
     }
 
     @AfterMethod
-    protected void tearDown() {
+    protected synchronized void tearDown() {
         WebDriverContainer.closeDriver();
     }
 }
