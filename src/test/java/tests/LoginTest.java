@@ -12,7 +12,7 @@ public class LoginTest extends BaseTest{
     private final String userEmail = Credentials.getProperty("email");
     private final String userPassword = Credentials.getProperty("password");
     private final String userName = Credentials.getProperty("name");
-    private final String loginSuccessMessage = "You are now logged in as %s.!";
+    private final String loginSuccessMessage = "You are now logged in as %s.";
     private final String emptyPassword = "";
     private final String incorrectPassword = "sdgesbwen";
     private final String loginErrorMessage = "Wrong password or the account is disabled, or does not exist";
