@@ -4,14 +4,14 @@
     <test name = "regression">
 
         <classes>
-        <class name="LoginTest">
+        <class name="ExampleTest">
 
         </class>
     </classes>
 </test>
 <test name="non-regression">
 <classes>
-    <class name="LoginTest">
+    <class name="ExampleTest">
         <methods>
             <include name="myFirstTest"></include>
         </methods>
