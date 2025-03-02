@@ -2,6 +2,8 @@ package pages.object;
 
 import io.qameta.allure.Step;
 import org.openqa.selenium.By;
+import org.openqa.selenium.StaleElementReferenceException;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
@@ -14,31 +16,51 @@ public class CatalogPage extends BasePage{
 
     @Step("Select item in the grid")
     public static void selectItemInTheGrid(String itemName) {
+        WebDriver driver = WebDriverContainer.getDriver();
         List<WebElement> items = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(itemList));
-        for (WebElement item : items) {
-            WebElement nameElement = WebDriverContainer.getDriver().findElement(itemInTheGrid);
-            String productName = nameElement.getText().trim();
 
-            if (productName.equalsIgnoreCase(itemName)) {
-                wait.until(ExpectedConditions.elementToBeClickable(item)).click();
-                return;
+        for (int i = 0; i < 3; i++) { // 3 попытки, если элемент не найден
+            try {
+                for (WebElement item : items) {
+                    WebElement nameElement = item.findElement(itemInTheGrid);
+                    String productName = nameElement.getText().trim();
+                    if (productName.equalsIgnoreCase(itemName)) {
+                        wait.until(ExpectedConditions.elementToBeClickable(nameElement)).click();
+                        return;
+                    }
+                }
+                break; // Выход из цикла, если нашли товар
+            } catch (StaleElementReferenceException e) {
+                items = driver.findElements(itemList);
             }
         }
-        throw new RuntimeException("Item with '" + itemName + "' name is not found!");
+        throw new RuntimeException("Item '" + itemName + "' not found!");
     }
 
     @Step("Select item in subcategory item grid")
     public static void selectItemInSubCategory(String subCategoryItemName) {
-        List<WebElement> subcategoryItems = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(itemList));
-        for (WebElement item : subcategoryItems) {
-            WebElement nameElement = WebDriverContainer.getDriver().findElement(itemInTheGrid);
-            String productName = nameElement.getText().trim();
+        WebDriver driver = WebDriverContainer.getDriver();
 
-            if (productName.equalsIgnoreCase(subCategoryItemName)) {
-                wait.until(ExpectedConditions.elementToBeClickable(item)).click();
-                return;
+        // Увеличенное время ожидания загрузки элементов (если нужно)
+        List<WebElement> subcategoryItems = wait.until(
+                ExpectedConditions.presenceOfAllElementsLocatedBy(itemList));
+
+        for (int attempt = 0; attempt < 3; attempt++) { // Три попытки в случае ошибки
+            try {
+                for (WebElement item : subcategoryItems) {
+                    WebElement nameElement = item.findElement(itemInTheGrid);
+
+                    if (nameElement.getText().trim().equalsIgnoreCase(subCategoryItemName)) {
+                        wait.until(ExpectedConditions.elementToBeClickable(nameElement)).click();
+                        return;
+                    }
+                }
+                break; // Если нашли товар, выход из цикла
+            } catch (StaleElementReferenceException e) {
+                subcategoryItems = driver.findElements(itemList); // Обновляем список
+            } catch (Exception e) {
             }
         }
-        throw new RuntimeException("Item with '" + subCategoryItemName + "' name is not found!");
+        throw new RuntimeException("Item '" + subCategoryItemName + "' not found!");
     }
 }

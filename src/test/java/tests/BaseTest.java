@@ -11,6 +11,7 @@ import org.testng.annotations.BeforeMethod;
 import java.time.Duration;
 
 import org.testng.annotations.Listeners;
+import pages.object.BasePage;
 import pages.object.WebDriverContainer;
 import pages.object.enums.Browser;
 import pages.object.listeners.ScreenshotListener;
@@ -25,6 +26,7 @@ public class BaseTest {
 //        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 //        driver.manage().window().maximize();
         driver = WebDriverContainer.getDriver();
+        BasePage.updateWait();
         //WebDriverContainer.getDriver().get("http://litecart.stqa.ru/en/");
         driver.get("http://litecart.stqa.ru/en/");
     }

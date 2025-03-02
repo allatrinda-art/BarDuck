@@ -9,15 +9,11 @@ public class BasePage {
     //protected WebDriver driver;
     protected static WebDriverWait wait;
 
-    static {
-        updateWait();
-    }
-
     // Конструктор, принимающий WebDriver
 //    public BasePage(WebDriver driver) {
     public static void updateWait() {
        // this.driver = driver;
         WebDriver driver = WebDriverContainer.getDriver();
-        wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
 }

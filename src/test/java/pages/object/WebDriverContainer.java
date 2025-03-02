@@ -84,7 +84,7 @@ public class WebDriverContainer {
 //    }
 
 public static synchronized WebDriver getDriver() {
-    if (driver == null || ((RemoteWebDriver) driver).getSessionId() == null) {
+    if (driver == null || isSessionInvalid()) {
         Browser browser = Browser.valueOf(System.getProperty("browser", "chrome").toLowerCase());
         OS platform = OS.valueOf(System.getProperty("os", "local").toLowerCase());
 
@@ -104,12 +104,18 @@ public static synchronized WebDriver getDriver() {
 
     public static synchronized void closeDriver() {
         if (driver != null) {
-            driver.quit();
-            driver = null;
+            try {
+                driver.quit();
+            } catch (Exception e) {
+            } finally {
+                driver = null;
+            }
         }
     }
 
     private static void createRemoteDriver(Browser browser, OS platform) {
+        if (driver != null) return; // Предотвращаем повторное создание
+
         DesiredCapabilities caps = new DesiredCapabilities();
         switch (browser) {
             case chrome -> {
@@ -138,6 +144,8 @@ public static synchronized WebDriver getDriver() {
     }
 
     private static void createLocalDriver(Browser browser) {
+        if (driver != null) return; // Если WebDriver уже есть, не создаем новый
+
         driver = switch (browser) {
             case chrome -> {
                 ChromeOptions options = new ChromeOptions();
@@ -148,5 +156,17 @@ public static synchronized WebDriver getDriver() {
             case edge -> new EdgeDriver();
             case safari -> new SafariDriver();
         };
+    }
+    private static boolean isSessionInvalid() {
+        try {
+            if (driver == null || ((RemoteWebDriver) driver).getSessionId() == null) {
+                return true;
+            }
+            // Проверяем, работает ли WebDriver через JavaScript
+            String readyState = (String) ((RemoteWebDriver) driver).executeScript("return document.readyState");
+            return !readyState.equals("complete");
+        } catch (Exception e) {
+            return true; // Любая ошибка = WebDriver не работает
+        }
     }
 }

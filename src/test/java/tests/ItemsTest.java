@@ -3,7 +3,6 @@ package tests;
 import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
-import org.testng.Assert;
 import org.testng.annotations.Test;
 import pages.object.CatalogPage;
 import pages.object.HomePage;
